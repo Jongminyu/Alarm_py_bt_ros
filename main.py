@@ -16,7 +16,7 @@ from modules.utils import config
 
 
 # Dynamically import the environment module and Env class
-env_module = importlib.import_module(config.get('scenario').get('environment'))
+env_module = importlib.import_module(config.get('scenario').get('environment') + ".env")
 Env = getattr(env_module, "Env")
 # Initialize Env instance
 env = Env(config)

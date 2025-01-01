@@ -1,7 +1,8 @@
 import pygame
 import math
-from modules.behavior_tree import *
 from modules.utils import config, parse_behavior_tree
+import importlib
+bt_module = importlib.import_module(config.get('scenario').get('environment') + ".behavior_tree")
 
 # Load agent configuration
 agent_max_speed = config['agents']['max_speed']
@@ -11,7 +12,7 @@ agent_approaching_to_target_radius = config['agents']['target_approaching_radius
 agent_track_size = config['simulation']['agent_track_size']
 agent_communication_radius = config['agents']['communication_radius']
 agent_situation_awareness_radius = config.get('agents', {}).get('situation_awareness_radius', 0)
-
+sampling_time = 1.0 / config['simulation']['sampling_freq']  # in seconds
 
 
 class BaseAgent:
@@ -56,11 +57,14 @@ class BaseAgent:
         for child in xml_node:
             children.append(self._parse_xml_to_bt(child))
 
+        BehaviorTreeList = getattr(bt_module, "BehaviorTreeList")        
         if node_type in BehaviorTreeList.CONTROL_NODES:
-            control_class = globals()[node_type]  # Control class should be globally available
+            # control_class = globals()[node_type]  # Control class should be globally available
+            control_class = getattr(bt_module, node_type)
             return control_class(node_type, children=children)
         elif node_type in BehaviorTreeList.ACTION_NODES:
-            action_class = globals()[node_type]  # Action class should be globally available
+            # action_class = globals()[node_type]  # Action class should be globally available
+            action_class = getattr(bt_module, node_type)
             return action_class(node_type, self)
         elif node_type == "BehaviorTree": # Root
             return children[0]
@@ -68,6 +72,7 @@ class BaseAgent:
             raise ValueError(f"[ERROR] Unknown behavior node type: {node_type}")    
 
     def _reset_bt_action_node_status(self):
+        BehaviorTreeList = getattr(bt_module, "BehaviorTreeList")        
         action_nodes = BehaviorTreeList.ACTION_NODES
         self.blackboard = {key: None if key in action_nodes else value for key, value in self.blackboard.items()}
 
