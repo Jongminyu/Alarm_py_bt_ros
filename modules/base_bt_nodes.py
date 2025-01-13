@@ -69,6 +69,20 @@ class SyncAction(Node):
         blackboard[self.name] = result
         return result
 
+class SyncCondition(Node):
+    def __init__(self, name, condition):
+        super().__init__(name)
+        self.condition = condition
+        self.is_expanded = False
+
+    async def run(self, agent, blackboard):
+        result = self.condition(agent, blackboard)
+        blackboard[self.name] = {'status': result, 'is_expanded': self.is_expanded} 
+        return result
+
+    def set_expanded(self):
+        self.is_expanded = True
+
 # Load additional configuration and import decision-making class dynamically
 import importlib
 from modules.utils import config
