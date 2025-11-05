@@ -1,8 +1,6 @@
 import asyncio
 import argparse
 import cProfile
-import importlib
-from threading import Thread
 
 from modules.utils import set_config
 
@@ -14,8 +12,8 @@ args = parser.parse_args()
 # Load configuration and initialize the environment
 set_config(args.config)
 from modules.utils import config
-from modules.base_env import BaseEnv as Env
-bt_runner = Env(config)
+from modules.bt_runner import BTRunner
+bt_runner = BTRunner(config)
 
 
 async def loop():

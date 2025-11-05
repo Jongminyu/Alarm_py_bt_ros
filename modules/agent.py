@@ -5,7 +5,7 @@ bt_module = optional_import(env_pkg + ".bt_nodes")
 from modules.bt_constructor import build_behavior_tree
 from modules.ros_bridge import ROSBridge
 
-class BaseAgent:
+class Agent:
     def __init__(self, ros_namespace=None):
         self.blackboard = {}
         self.ros_bridge = ROSBridge.get()

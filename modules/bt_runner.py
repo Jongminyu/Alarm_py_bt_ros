@@ -1,9 +1,8 @@
 import os
-os.environ['SDL_VIDEO_WINDOW_POS'] = "0,30"  # top-left corner
 import pygame
-from modules.base_agent import BaseAgent
+from modules.agent import Agent
 
-class BaseEnv:
+class BTRunner:
     def __init__(self, config):
         self.config = config
         self.bt_viz_cfg = config['bt_runner'].get('bt_visualiser', {})
@@ -34,7 +33,7 @@ class BaseEnv:
         ros_namespace = self.config['agent'].get('namespaces', [])
 
         # Initialize agent
-        self.agent = BaseAgent(ros_namespace)
+        self.agent = Agent(ros_namespace)
 
         # Provide global info and create BT
         scenario_path = self.config['scenario'].replace('.', '/')

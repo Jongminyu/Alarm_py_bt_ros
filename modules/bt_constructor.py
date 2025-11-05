@@ -13,7 +13,7 @@ def build_behavior_tree(agent, behavior_tree_xml: str, env_pkg: str):
 
     Parameters
     ----------
-    agent : BaseAgent (or compatible)
+    agent : Agent (or compatible)
         The agent instance; passed to action/condition node constructors.
     behavior_tree_xml : str
         Path to the XML file containing a <BehaviorTree> root.

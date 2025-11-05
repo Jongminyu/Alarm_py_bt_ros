@@ -26,7 +26,7 @@ Move the spawned turtle using keyboard input
 
 Run Turtle1 Action Server
 ```
-python3 scenarios/features/ros/turtle_nav_action_server.py --ns /turtle1
+python3 scenarios/example_turtlesim/turtle_nav_action_server.py --ns /turtle1
 ```
 
 Run Behaviour Tree Controller
