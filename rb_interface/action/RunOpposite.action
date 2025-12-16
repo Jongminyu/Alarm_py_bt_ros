@@ -1,0 +1,13 @@
+# RunOpposite.action
+
+# Goal
+float32 target_angle
+float32 speed
+float32 duration
+---
+# Result
+string message
+---
+# Feedback
+string current_state
+float32 time_elapsed

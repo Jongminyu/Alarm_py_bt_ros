@@ -17,18 +17,47 @@ bt_runner = BTRunner(config)
 
 
 async def loop():
+    from modules.base_bt_nodes import Status
     while bt_runner.running:
         bt_runner.handle_keyboard_events()
+        
+        # Render FIRST so we see the tree state even if step() blocks (e.g. Time UI)
+        bt_runner.render()
+        
         if not bt_runner.paused:
             await bt_runner.step()
-        bt_runner.render()
+            
+            # Check if the root node has succeeded (Ending played)
+            if bt_runner.agent.tree.status == Status.SUCCESS:
+                print("Mission Cycle Complete. Restarting Alarm Mode...")
+                # No break, let it loop. 
+                pass
+                
+        bt_runner.clock.tick(bt_runner.bt_tick_rate)
 
     bt_runner.close()
 
 
 
 if __name__ == "__main__":
-    if config['bt_runner']['profiling_mode']:
-        cProfile.run('main()', sort='cumulative')
-    else:
-        asyncio.run(loop())
+    import subprocess
+    import sys
+    import os
+
+    # Launch the Stop Button UI in a separate process
+    ui_process = subprocess.Popen([sys.executable, "modules/stop_button_ui.py"])
+    
+    # Launch the Camera Service in a separate process
+    camera_process = subprocess.Popen([sys.executable, "modules/camera_service.py"])
+    
+    # YOLO Removed (User runs manually)
+
+    try:
+        if config['bt_runner']['profiling_mode']:
+            cProfile.run('main()', sort='cumulative')
+        else:
+            asyncio.run(loop())
+    finally:
+        # Ensure the processes are killed when main exits
+        ui_process.terminate()
+        camera_process.terminate()

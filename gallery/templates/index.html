@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Photo Calendar</title>
+    <!-- Hand-drawn font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="calendar-container">
+        <header>
+            <h1 id="month-year">December 2025</h1>
+            <div class="controls">
+                <button onclick="prevMonth()">←</button>
+                <button onclick="nextMonth()">→</button>
+            </div>
+        </header>
+
+        <div class="weekdays">
+            <div class="day-name sunday">SUN</div>
+            <div class="day-name">MON</div>
+            <div class="day-name">TUE</div>
+            <div class="day-name">WED</div>
+            <div class="day-name">THU</div>
+            <div class="day-name">FRI</div>
+            <div class="day-name saturday">SAT</div>
+        </div>
+
+        <div class="days" id="days-grid">
+            <!-- JS will populate this -->
+        </div>
+    </div>
+
+    <!-- Modal for viewing full image -->
+    <div id="photo-modal" class="modal" onclick="closeModal()">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="caption"></div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

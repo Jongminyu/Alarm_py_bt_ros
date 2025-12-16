@@ -7,17 +7,35 @@ class BTRunner:
         self.config = config
         self.bt_viz_cfg = config['bt_runner'].get('bt_visualiser', {})
         self.bt_tick_rate = config['bt_runner']['bt_tick_rate']
+        
+        # Check for Headless Environment
+        if os.environ.get('DISPLAY', '') == '':
+            print("⚠️ Headless Environment Detected (No DISPLAY). Using 'dummy' video driver.")
+            os.environ["SDL_VIDEODRIVER"] = "dummy"
+            self.bt_viz_cfg['enabled'] = False # Force disable viz
+            
         pygame.init()
+        
         if self.bt_viz_cfg.get('enabled', False):
             os.environ['SDL_VIDEO_WINDOW_POS'] = "0,30"  # top-left corner
             self.screen_height = self.bt_viz_cfg.get('screen_height',500)
             self.screen_width = self.bt_viz_cfg.get('screen_width',500) 
-            self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.RESIZABLE)
-            self.background_color = (224, 224, 224)
-            from .bt_visualiser import BTViewer
-            self.bt_visualiser = BTViewer(
-                direction=self.bt_viz_cfg.get('direction', 'Vertical')
-            )
+            try:
+                self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), pygame.RESIZABLE)
+                self.background_color = (224, 224, 224)
+                from .bt_visualiser import BTViewer
+                self.bt_visualiser = BTViewer(
+                    direction=self.bt_viz_cfg.get('direction', 'Vertical')
+                )
+            except pygame.error as e:
+                print(f"⚠️ Visualizer Failed (Pygame Error): {e}")
+                self.bt_viz_cfg['enabled'] = False
+        
+        if not self.bt_viz_cfg.get('enabled', False):
+             # Ensure a dummy screen exists for event loop/clock
+             if pygame.display.get_surface() is None:
+                  pygame.display.set_mode((1, 1))
+
         self.clock = pygame.time.Clock()
 
         # Initialise
@@ -44,7 +62,6 @@ class BTRunner:
     async def step(self):
         # Main bt_runner loop logic
         await self.agent.run_tree()
-        self.clock.tick(self.bt_tick_rate)
 
 
     def close(self):
