@@ -41,17 +41,23 @@ ros2 launch wego navigation_diif_launch.py
 
 
 cd ~/py_bt_ros/modules
+
 source install/local_setup.bash
+
 python3 yolo_detector.py
 
 # Terminal 4
 
 cd ~/py_bt_ros/servers
+
 source install/local_setup.bash
+
 python3 run_opposite_server.py
 
 # Terminal 5
 
 cd ~/py_bt_ros
+
 source install/local_setup.bash
+
 python3 main.py
