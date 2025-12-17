@@ -13,7 +13,7 @@ ROS 2 기반 Behavior Tree(BT) 프레임워크로 로봇 내비게이션, YOLO �
 - **Camera Service**: 전용 카메라 모듈 기반 이미지 캡처 및 저장 관리
 - **Stop Button UI (PyGame)**: 수동 미션 중단/상태 제어 GUI
 - **Custom ROS 2 Actions**: `RunOpposite` 등 커스텀 Action 제공  
-  - Action 인터페이스는 본 저장소의 **`rb_interface`** 패키지에 포함되어 있습니다.
+- Action 인터페이스는 본 저장소의 **`rb_interface`** 패키지에 포함되어 있습니다.
 
 ---
 
